@@ -1,26 +1,55 @@
 import 'package:clinic_app/modules/phone.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 
 GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+final _advancedDrawerController = AdvancedDrawerController();
 
 class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
-        title: Text("Clinic",style: TextStyle(color: Colors.white),),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            if (!scaffoldKey.currentState!.isDrawerOpen) {
-              //check if drawer is closed
-              scaffoldKey.currentState!.openDrawer(); //open drawer
-            }
-          },
+    return AdvancedDrawer(
+        backdropColor: Colors.blueGrey,
+        controller: _advancedDrawerController,
+        animationCurve: Curves.easeInOut,
+        animationDuration: const Duration(milliseconds: 300),
+    animateChildDecoration: true,
+    rtlOpening: false,
+    disabledGestures: false,
+    childDecoration: const BoxDecoration(
+    // NOTICE: Uncomment if you want to add shadow behind the page.
+    // Keep in mind that it may cause animation jerks.
+    // boxShadow: <BoxShadow>[
+    //   BoxShadow(
+    //     color: Colors.black12,
+    //     blurRadius: 0.0,
+    //   ),
+    // ],
+    borderRadius: const BorderRadius.all(Radius.circular(16)),
+    ),
+
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blueGrey,
+          title: const Text('Clinic'),
+          leading: IconButton(
+            onPressed: _handleMenuButtonPressed,
+            icon: ValueListenableBuilder<AdvancedDrawerValue>(
+              valueListenable: _advancedDrawerController,
+              builder: (_, value, __) {
+                return AnimatedSwitcher(
+                  duration: Duration(milliseconds: 250),
+                  child: Icon(
+                    value.visible ? Icons.clear : Icons.menu,
+                    key: ValueKey<bool>(value.visible),
+                  ),
+                );
+              },
+            ),
+          ),
         ),
+        body: Container(),
       ),
       drawer: Drawer(
         child: ListView(children: [
@@ -54,5 +83,10 @@ class Menu extends StatelessWidget {
         ]),
       ),
     );
+  }
+  void _handleMenuButtonPressed() {
+    // NOTICE: Manage Advanced Drawer state through the Controller.
+    // _advancedDrawerController.value = AdvancedDrawerValue.visible();
+    _advancedDrawerController.showDrawer();
   }
 }

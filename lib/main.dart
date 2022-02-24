@@ -1,6 +1,7 @@
 
 import 'package:clinic_app/modules/appointments.dart';
 import 'package:clinic_app/modules/login_screen.dart';
+import 'package:clinic_app/modules/menu.dart';
 import 'package:clinic_app/modules/registration_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: Menu(),
     );
   }
 }
