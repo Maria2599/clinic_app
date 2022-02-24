@@ -1,10 +1,14 @@
+import 'dart:async';
+
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:clinic_app/modules/cubit/register_cubit.dart';
 import 'package:clinic_app/modules/cubit/states.dart';
-import 'package:clinic_app/modules/login_screen.dart';
+import 'package:clinic_app/shared/components/components.dart';
 import 'package:clinic_app/shared/components/rounded_button.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../shared/components/constants.dart';
 import 'menu.dart';
 
@@ -13,7 +17,7 @@ class Registration extends StatefulWidget {
   State<StatefulWidget> createState() => RegistrationState();
 }
 
-var formkey = GlobalKey<FormState>();
+var formKey = GlobalKey<FormState>();
 var email = TextEditingController();
 var password = TextEditingController();
 var phone = TextEditingController();
@@ -22,215 +26,295 @@ var age = TextEditingController();
 
 class RegistrationState extends State<Registration> {
   bool isHidden = false;
+  Timer? _timer;
+  late double _progress;
 
-  ChangePassword() {
+  changePassword() {
     setState(() => isHidden = !isHidden);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (BuildContext context) => RegisterCubit(),
-        child: BlocConsumer<RegisterCubit, States>(
-            listener: (BuildContext context, state) {
-              if(state is CreateUserSuccessState){
-                Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Menu()));
+    return BlocConsumer<RegisterCubit, States>(
+        listener: (BuildContext context, state) {
+      if (state is RegisterLoadingState) {
+        _progress = 0;
+        _timer?.cancel();
+        _timer =
+            Timer.periodic(const Duration(milliseconds: 20), (Timer timer) {
+          EasyLoading.showProgress(_progress,
+              status:
+                  '${(_progress * 100).toStringAsFixed(0)}% \n Loading');
+          _progress += 0.03;
 
-              }
-            },
-            builder: (BuildContext context, Object? state) {
-              var cubit = RegisterCubit.get(context);
-              return Scaffold(
-                backgroundColor: Colors.white,
-                body: Column(children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Form(
-                        key: formkey,
-                        child: SingleChildScrollView(
-                          padding: EdgeInsets.only(top: 155.0),
-                          scrollDirection: Axis.vertical,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                "Create new account",
-                                style: Theme.of(context).textTheme.headline4,
-                              ),
-                              const SizedBox(
-                                height: 14.0,
-                              ),
-                              TextFormField(
-                                controller: name,
-                                textAlign: TextAlign.center,
-                                decoration: TextFieldDecoration.copyWith(
-                                  hintText: "Enter your Name",
-                                  suffixIcon: Icon(
-                                    Icons.person,
-                                    size: 20.0,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 14.0,
-                              ),
-                              TextFormField(
-                                controller: age,
-                                textAlign: TextAlign.center,
-                                keyboardType: TextInputType.number,
-                                decoration: TextFieldDecoration.copyWith(
-                                  hintText: "Enter your Age",
-                                  suffixIcon: Icon(
-                                    Icons.account_box_outlined,
-                                    size: 20.0,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 8.0,
-                              ),
-                              TextFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Phone can't be empty";
-                                  } else if (!RegExp(r'(^(01)+[0-9]{9}$)')
-                                      .hasMatch(value)) {
-                                    return ('Enter a valid Phone Number');
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                controller: phone,
-                                decoration: TextFieldDecoration.copyWith(
-                                  hintText: "Enter your Phone",
-                                  suffixIcon: Icon(
-                                    Icons.phone_android_outlined,
-                                    size: 20.0,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 8.0,
-                              ),
-                              TextFormField(
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Email can't be empty";
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                  keyboardType: TextInputType.emailAddress,
-                                  textAlign: TextAlign.center,
-                                  controller: email,
-                                  decoration: TextFieldDecoration.copyWith(
-                                    hintText: "Enter your Email",
-                                    suffixIcon: Icon(
-                                      Icons.email_outlined,
-                                      size: 20.0,
-                                    ),
-                                  )),
-                              const SizedBox(
-                                height: 8.0,
-                              ),
-                              TextFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Password can't be empty";
-                                  } else if (value.length < 6) {
-                                    return "Password must be more than 6 letters ";
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                obscureText: isHidden,
-                                textAlign: TextAlign.center,
-                                controller: password,
-                                decoration: TextFieldDecoration.copyWith(
-                                    hintText: "Enter your Password",
-                                    suffixIcon: IconButton(
-                                        onPressed: ChangePassword,
-                                        icon: isHidden
-                                            ? Icon(
-                                                Icons.visibility_off,
-                                                size: 20.0,
-                                              )
-                                            : Icon(
-                                                Icons.visibility,
-                                                size: 22.0,
-                                              ))),
-                              ),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              ConditionalBuilder(
-                                condition: state is! RegisterLoadingState,
-                                fallback: (context) =>
-                                    Center(child: CircularProgressIndicator()),
-                                builder: (context) => RoundedButton(
-                                  title: "SignUp",
-                                  onPressed: () async {
-                                    phoneConst = phone.text;
-                                    String s = "";
-                                    print(phoneConst);
-                                    if (formkey.currentState!.validate()) {
-                                      print(email.text);
+          if (_progress >= 1) {
+            _timer?.cancel();
+            EasyLoading.dismiss();
+          }
+        });
+      } else if (state is CreateUserSuccessState) {
+        EasyLoading.showSuccess("Successful");
 
-                                      cubit.registerUser(
-                                          email: email.text,
-                                          password: password.text,
-                                          phone: phone.text,
-                                          name: name.text,
-                                          age: age.text);
-                                      // Navigator.push(
-                                      //   //         context,
-                                      //   //         MaterialPageRoute(
-                                      //   //             builder: (context) => Menu()));
+        navigateTo(
+            context,
+            AnimatedSplashScreen(
+                      splash: Image(
+                        image: AssetImage("images/back.jpg"),
+                        width: double.infinity,
+                      ),
+                      nextScreen: Menu(),
+                      centered: false,
+                      splashIconSize: double.infinity,
+                    ));
+      } else if (state is RegisterErrorState) {
+        EasyLoading.showError("Error", duration: Duration(seconds: 5));
+      }
+    }, builder: (BuildContext context, Object? state) {
+      var cubit = RegisterCubit.get(context);
 
-                                    }
-                                  },
-                                  color: Colors.lightBlueAccent,
-                                ),
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    "Have an account?",
-                                    style: TextStyle(
-                                        fontSize: 15.0, color: Colors.black54),
-                                  ),
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => Login()));
-                                      },
-                                      child: Text(
-                                        "LogIn",
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.lightBlue),
-                                      ))
-                                ],
-                              ),
-                            ],
+      return SafeArea(
+        child: Scaffold(
+          backgroundColor: Color(0xFF4bcb66),
+          body: Column(children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "LET'S START",
+                style: TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Text(
+              "CREATE AN ACCOUNT",
+              style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.grey[100],
+                  fontWeight: FontWeight.bold),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 24.0, right: 24.0, top: 30.0),
+                child: Form(
+                  key: formKey,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(
+                          height: 14.0,
+                        ),
+                        TextCustomFiled(
+                          obscureText: false,
+                          controller: name,
+                          textAlign: TextAlign.left,
+                          decoration: TextFieldDecoration.copyWith(
+                            filled: true,
+                            fillColor: Colors.green,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10),
+                            labelText: "Name",
+                            prefixIcon: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 20.0,
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Name can't be empty";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.text,
+                        ),
+                        const SizedBox(
+                          height: 14.0,
+                        ),
+                        TextCustomFiled(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Age can't be empty";
+                            } else {
+                              return null;
+                            }
+                          },
+                          obscureText: false,
+                          controller: age,
+                          textAlign: TextAlign.left,
+                          keyboardType: TextInputType.number,
+                          decoration: TextFieldDecoration.copyWith(
+                            filled: true,
+                            fillColor: Colors.green,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10),
+                            labelText: "Age",
+                            prefixIcon: const Icon(
+                              Icons.account_box_outlined,
+                              color: Colors.white,
+                              size: 20.0,
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        TextCustomFiled(
+                          obscureText: false,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Phone can't be empty";
+                            } else if (!RegExp(r'(^(01)+[0-9]{9}$)')
+                                .hasMatch(value)) {
+                              return ('Enter a valid Phone Number');
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.phone,
+                          textAlign: TextAlign.left,
+                          controller: phone,
+                          decoration: TextFieldDecoration.copyWith(
+                            filled: true,
+                            fillColor: Colors.green,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10),
+                            labelText: "Phone",
+                            prefixIcon: const Icon(
+                              Icons.phone_android_outlined,
+                              color: Colors.white,
+                              size: 20.0,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        TextCustomFiled(
+                            obscureText: false,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Email can't be empty";
+                              } else {
+                                return null;
+                              }
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            textAlign: TextAlign.left,
+                            controller: email,
+                            decoration: TextFieldDecoration.copyWith(
+                              filled: true,
+                              fillColor: Colors.green,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 20.0, horizontal: 10),
+                              labelText: "Email",
+                              prefixIcon: const Icon(
+                                Icons.email_outlined,
+                                color: Colors.white,
+                                size: 20.0,
+                              ),
+                            )),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        TextCustomFiled(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Password can't be empty";
+                            } else if (value.length < 6) {
+                              return "Password must be more than 6 letters ";
+                            } else {
+                              return null;
+                            }
+                          },
+                          obscureText: isHidden,
+                          textAlign: TextAlign.left,
+                          controller: password,
+                          decoration: TextFieldDecoration.copyWith(
+                              filled: true,
+                              fillColor: Colors.green,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 20.0, horizontal: 10),
+                              labelText: "Password",
+                              prefixIcon: const Icon(
+                                Icons.password_rounded,
+                                color: Colors.white,
+                              ),
+                              suffixIcon: IconButton(
+                                  onPressed: changePassword,
+                                  icon: isHidden
+                                      ? const Icon(
+                                          Icons.lock_outline,
+                                          color: Colors.white,
+                                          size: 20.0,
+                                        )
+                                      : const Icon(
+                                          Icons.lock_open,
+                                          color: Colors.white,
+                                          size: 22.0,
+                                        ))),
+                          keyboardType: TextInputType.text,
+                        ),
+                        const SizedBox(
+                          height: 25.0,
+                        ),
+                        RoundedButton(
+                          title: "SignUp",
+                          onPressed: () async {
+                            phoneConst = phone.text;
+                            String s = "";
+                            print(phoneConst);
+                            if (formKey.currentState!.validate()) {
+                              print(email.text);
+                              cubit.registerUser(
+                                  email: email.text,
+                                  password: password.text,
+                                  phone: phone.text,
+                                  name: name.text,
+                                  age: age.text);
+                            }
+                          },
+                          color: Color(0xFF148e41),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Already have an account?",
+                              style: TextStyle(
+                                  fontSize: 15.0, color: Colors.white),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  "LogIn",
+                                  style: TextStyle(
+                                      fontSize: 16.0, color: Colors.black),
+                                ))
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ]),
-              );
-            }));
+                ),
+              ),
+            ),
+          ]),
+        ),
+      );
+    });
   }
 }

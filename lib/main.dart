@@ -1,9 +1,17 @@
 
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:clinic_app/modules/appointments.dart';
+import 'package:clinic_app/modules/cubit/register_cubit.dart';
+import 'package:clinic_app/modules/doctors_screen.dart';
 import 'package:clinic_app/modules/login_screen.dart';
+import 'package:clinic_app/modules/menu.dart';
 import 'package:clinic_app/modules/registration_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import 'modules/cubit/login_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +31,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Login(),
+    return  MultiBlocProvider(
+
+      providers: [
+        BlocProvider(create: (BuildContext context) => LoginCubit()),
+        BlocProvider(create: (BuildContext context) => RegisterCubit()),
+
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+         home:Login(),
+
+        builder: EasyLoading.init(),
+      ),
     );
   }
 }
