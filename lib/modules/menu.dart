@@ -10,6 +10,7 @@ class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdvancedDrawer(
+<<<<<<< HEAD
       backdropColor: Color(0xFF148e41),
       controller: _advancedDrawerController,
       animationCurve: Curves.easeInOut,
@@ -23,6 +24,30 @@ class Menu extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xFF4bcb66),
+=======
+        backdropColor: Colors.blueGrey,
+        controller: _advancedDrawerController,
+        animationCurve: Curves.easeInOut,
+        animationDuration: const Duration(milliseconds: 300),
+    animateChildDecoration: true,
+    rtlOpening: false,
+    disabledGestures: false,
+    childDecoration: const BoxDecoration(
+    // NOTICE: Uncomment if you want to add shadow behind the page.
+    // Keep in mind that it may cause animation jerks.
+    // boxShadow: <BoxShadow>[
+    //   BoxShadow(
+    //     color: Colors.black12,
+    //     blurRadius: 0.0,
+    //   ),
+    // ],
+    borderRadius: const BorderRadius.all(Radius.circular(16)),
+    ),
+
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blueGrey,
+>>>>>>> 697a097267278a5016dafbba319c9f1a4f022ec4
           title: const Text('Clinic'),
           leading: IconButton(
             onPressed: _handleMenuButtonPressed,
@@ -39,10 +64,14 @@ class Menu extends StatelessWidget {
               },
             ),
           ),
+<<<<<<< HEAD
         ),
         body: Scaffold(
           backgroundColor: Color(0xFF4bcb66),
+=======
+>>>>>>> 697a097267278a5016dafbba319c9f1a4f022ec4
         ),
+        body: Container(),
       ),
       drawer: Drawer(
         backgroundColor: Color(0xFF148e41),
@@ -118,7 +147,10 @@ class Menu extends StatelessWidget {
       ),
     );
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 697a097267278a5016dafbba319c9f1a4f022ec4
   void _handleMenuButtonPressed() {
     // NOTICE: Manage Advanced Drawer state through the Controller.
     // _advancedDrawerController.value = AdvancedDrawerValue.visible();

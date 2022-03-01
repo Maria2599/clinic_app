@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return  MultiBlocProvider(
 
       providers: [
@@ -44,6 +45,11 @@ class MyApp extends StatelessWidget {
 
         builder: EasyLoading.init(),
       ),
+=======
+    return  MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Menu(),
+>>>>>>> 697a097267278a5016dafbba319c9f1a4f022ec4
     );
   }
 }

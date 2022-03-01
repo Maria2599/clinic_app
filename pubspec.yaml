@@ -38,9 +38,12 @@ dependencies:
   flutter_bloc: ^8.0.1
   bloc: ^8.0.2
   flutter_advanced_drawer: ^1.3.0
+<<<<<<< HEAD
   flutter_easyloading: ^3.0.3
   animated_splash_screen: ^1.1.0
 
+=======
+>>>>>>> 697a097267278a5016dafbba319c9f1a4f022ec4
 
 
   # The following adds the Cupertino Icons font to your application.
