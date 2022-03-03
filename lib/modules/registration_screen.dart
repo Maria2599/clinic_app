@@ -11,6 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../shared/components/constants.dart';
 import 'menu.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 
 class Registration extends StatefulWidget {
   @override
@@ -113,13 +115,12 @@ class RegistrationState extends State<Registration> {
                         TextCustomFiled(
                           obscureText: false,
                           controller: name,
-                          textAlign: TextAlign.left,
                           decoration: TextFieldDecoration.copyWith(
                             filled: true,
                             fillColor: Colors.green,
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 20.0, horizontal: 10),
-                            labelText: "Name",
+                            labelText: AppLocalizations.of(context)!.name,
                             prefixIcon: const Icon(
                               Icons.person,
                               color: Colors.white,
@@ -128,7 +129,7 @@ class RegistrationState extends State<Registration> {
                           ),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Name can't be empty";
+                              return AppLocalizations.of(context)!.nameCantbeEmpty;
                             } else {
                               return null;
                             }
@@ -141,21 +142,20 @@ class RegistrationState extends State<Registration> {
                         TextCustomFiled(
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Age can't be empty";
+                              return AppLocalizations.of(context)!.ageCantbeEmpty;
                             } else {
                               return null;
                             }
                           },
                           obscureText: false,
                           controller: age,
-                          textAlign: TextAlign.left,
                           keyboardType: TextInputType.number,
                           decoration: TextFieldDecoration.copyWith(
                             filled: true,
                             fillColor: Colors.green,
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 20.0, horizontal: 10),
-                            labelText: "Age",
+                            labelText: AppLocalizations.of(context)!.age,
                             prefixIcon: const Icon(
                               Icons.account_box_outlined,
                               color: Colors.white,
@@ -170,23 +170,22 @@ class RegistrationState extends State<Registration> {
                           obscureText: false,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Phone can't be empty";
+                              return AppLocalizations.of(context)!.phoneCantbeEmpty;
                             } else if (!RegExp(r'(^(01)+[0-9]{9}$)')
                                 .hasMatch(value)) {
-                              return ('Enter a valid Phone Number');
+                              return AppLocalizations.of(context)!.enterVaildPhone;
                             } else {
                               return null;
                             }
                           },
                           keyboardType: TextInputType.phone,
-                          textAlign: TextAlign.left,
                           controller: phone,
                           decoration: TextFieldDecoration.copyWith(
                             filled: true,
                             fillColor: Colors.green,
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 20.0, horizontal: 10),
-                            labelText: "Phone",
+                            labelText: AppLocalizations.of(context)!.phone,
                             prefixIcon: const Icon(
                               Icons.phone_android_outlined,
                               color: Colors.white,
@@ -201,20 +200,23 @@ class RegistrationState extends State<Registration> {
                             obscureText: false,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Email can't be empty";
+                                return AppLocalizations.of(context)!.emailCantbeEmpty;
+                              } else if (!RegExp(
+                                  "^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-z]")
+                                  .hasMatch(value)) {
+                                return AppLocalizations.of(context)!.enterAValidEMail;
                               } else {
                                 return null;
                               }
                             },
                             keyboardType: TextInputType.emailAddress,
-                            textAlign: TextAlign.left,
                             controller: email,
                             decoration: TextFieldDecoration.copyWith(
                               filled: true,
                               fillColor: Colors.green,
                               contentPadding: const EdgeInsets.symmetric(
                                   vertical: 20.0, horizontal: 10),
-                              labelText: "Email",
+                              labelText: AppLocalizations.of(context)!.email,
                               prefixIcon: const Icon(
                                 Icons.email_outlined,
                                 color: Colors.white,
@@ -227,22 +229,21 @@ class RegistrationState extends State<Registration> {
                         TextCustomFiled(
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "Password can't be empty";
+                              return AppLocalizations.of(context)!.passwordCantbeEmpty;
                             } else if (value.length < 6) {
-                              return "Password must be more than 6 letters ";
+                              return AppLocalizations.of(context)!.passwordmustbemorethan;
                             } else {
                               return null;
                             }
                           },
                           obscureText: isHidden,
-                          textAlign: TextAlign.left,
                           controller: password,
                           decoration: TextFieldDecoration.copyWith(
                               filled: true,
                               fillColor: Colors.green,
                               contentPadding: const EdgeInsets.symmetric(
                                   vertical: 20.0, horizontal: 10),
-                              labelText: "Password",
+                              labelText: AppLocalizations.of(context)!.password,
                               prefixIcon: const Icon(
                                 Icons.password_rounded,
                                 color: Colors.white,
@@ -266,10 +267,9 @@ class RegistrationState extends State<Registration> {
                           height: 25.0,
                         ),
                         RoundedButton(
-                          title: "SignUp",
+                          title: AppLocalizations.of(context)!.signUp,
                           onPressed: () async {
                             phoneConst = phone.text;
-                            String s = "";
                             print(phoneConst);
                             if (formKey.currentState!.validate()) {
                               print(email.text);
@@ -290,8 +290,8 @@ class RegistrationState extends State<Registration> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              "Already have an account?",
+                             Text(
+                              AppLocalizations.of(context)!.alreadyhaveAccount,
                               style: TextStyle(
                                   fontSize: 15.0, color: Colors.white),
                             ),
@@ -299,8 +299,8 @@ class RegistrationState extends State<Registration> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Text(
-                                  "LogIn",
+                                child:  Text(
+                                  AppLocalizations.of(context)!.login,
                                   style: TextStyle(
                                       fontSize: 16.0, color: Colors.black),
                                 ))

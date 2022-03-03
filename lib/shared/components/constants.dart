@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
 const TextFieldDecoration = InputDecoration(
-<<<<<<< HEAD
   labelStyle: TextStyle(color: Colors.white,),
-=======
->>>>>>> 697a097267278a5016dafbba319c9f1a4f022ec4
-  border: OutlineInputBorder(
+border: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.white, width: 1.0),
       borderRadius: BorderRadius.all(Radius.circular(5.0))
   ),

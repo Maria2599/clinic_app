@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class Login extends StatefulWidget {
 
@@ -65,6 +66,7 @@ class LoginState extends State<Login> {
                       splashIconSize: double.infinity,
                     ));
       } else if (state is LoginErrorState) {
+
         EasyLoading.showError("Error", duration: Duration(seconds: 5));
       }
     }, builder: (BuildContext context, Object? state) {
@@ -116,11 +118,11 @@ class LoginState extends State<Login> {
                                     TextCustomFiled(
                                       validator: (value) {
                                         if (value!.isEmpty) {
-                                          return "Email can't be empty";
+                                          return AppLocalizations.of(context)!.emailCantbeEmpty;
                                         } else if (!RegExp(
                                                 "^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-z]")
                                             .hasMatch(value)) {
-                                          return 'Enter a valid Email.. \n it must not include space or - or _ or / ';
+                                          return AppLocalizations.of(context)!.enterAValidEMail;
                                         } else {
                                           return null;
                                         }
@@ -132,7 +134,7 @@ class LoginState extends State<Login> {
                                           TextFieldDecoration.copyWith(
                                         filled: true,
                                         fillColor: Colors.green,
-                                        labelText: "Email",
+                                        labelText: AppLocalizations.of(context)!.email,
                                         prefixIcon: const Icon(
                                           Icons.person,
                                           color: Colors.white,
@@ -146,9 +148,9 @@ class LoginState extends State<Login> {
                                     TextCustomFiled(
                                       validator: (value) {
                                         if (value!.isEmpty) {
-                                          return "Password can't be empty";
+                                          return AppLocalizations.of(context)!.passwordCantbeEmpty;
                                         } else if (value.length < 6) {
-                                          return "Password must be more than 6 letters ";
+                                          return AppLocalizations.of(context)!.passwordmustbemorethan;
                                         } else {
                                           return null;
                                         }
@@ -161,7 +163,7 @@ class LoginState extends State<Login> {
                                           TextFieldDecoration.copyWith(
                                               filled: true,
                                               fillColor: Colors.green,
-                                              labelText: "Password",
+                                              labelText: AppLocalizations.of(context)!.password,
                                               prefixIcon: const Icon(
                                                 Icons.password_rounded,
                                                 color: Colors.white,
@@ -188,8 +190,8 @@ class LoginState extends State<Login> {
                                     ),
                                     TextButton(
                                         onPressed: () {},
-                                        child: const Text(
-                                          "Forget Password?",
+                                        child:  Text(
+                                            AppLocalizations.of(context)!.forgetPassword,
                                           style: TextStyle(
                                               fontSize: 15.0,
                                               color: Colors.white),
@@ -198,7 +200,7 @@ class LoginState extends State<Login> {
                                       height: 35.0,
                                     ),
                                     RoundedButton(
-                                      title: "LogIn",
+                                      title: AppLocalizations.of(context)!.login,
                                       onPressed: () async {
                                         AnimatedSplashScreen(
                                           splash: Image.asset(
@@ -208,7 +210,6 @@ class LoginState extends State<Login> {
                                               .rotationTransition,
                                           backgroundColor: Colors.white,
                                         );
-                                        String s = "";
                                         if (formkey.currentState!
                                             .validate()) {
                                           print(email.text);
@@ -228,8 +229,8 @@ class LoginState extends State<Login> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        const Text(
-                                          "Don't have an account?",
+                                         Text(
+                                        AppLocalizations.of(context)!.dontHaveAnAccount,
                                           style: TextStyle(
                                               fontSize: 15.0,
                                               color: Colors.white),
@@ -243,8 +244,8 @@ class LoginState extends State<Login> {
                                                         Registration(),
                                                   ));
                                             },
-                                            child: const Text(
-                                              "Register",
+                                            child:  Text(
+                                                AppLocalizations.of(context)!.register,
                                               style: TextStyle(
                                                   fontSize: 16.0,
                                                   color: Colors.black),

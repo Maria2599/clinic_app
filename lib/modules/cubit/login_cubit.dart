@@ -37,7 +37,6 @@ class LoginCubit extends Cubit<States> {
       } else if (e.code == 'wrong-password') {
         s = "Password is wrong";
       }
-
       Fluttertoast.showToast(
           msg: s,
           toastLength: Toast.LENGTH_SHORT,
@@ -46,7 +45,7 @@ class LoginCubit extends Cubit<States> {
           timeInSecForIosWeb: 1,
           textColor: Colors.white,
           fontSize: 16.0);
-      emit(LoginErrorState());
+      emit(LoginErrorState(error: e.toString()));
     });
   }
 

@@ -1,13 +1,8 @@
-import 'package:clinic_app/models/userModel.dart';
-import 'package:clinic_app/modules/cubit/register_cubit.dart';
+import 'package:clinic_app/models/doctorModel.dart';
+import 'package:clinic_app/modules/cubit/appCubit.dart';
 import 'package:clinic_app/shared/components/constants.dart';
-import 'package:clinic_app/shared/components/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'cubit/login_cubit.dart';
 import 'cubit/states.dart';
 
 class PhoneNumber extends StatelessWidget {
@@ -17,17 +12,56 @@ class PhoneNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = "tel:${num}";
 
-    return Scaffold(
-      body: Container(
-        child: Center(
-          child: TextButton(
-            onPressed: () async {
-              await launch(url);
-            },
-            child: Text(num),
-          ),
-        ),
-      ),
-    );
+    return BlocConsumer<AppCubit,States>(
+      listener: (BuildContext context, state) {  },
+      builder: (BuildContext context, Object? state) {
+        var cubit = AppCubit.get(context);
+        return Scaffold(
+            body: Container(
+              // child: Center(
+              //   child: TextButton(
+              //     onPressed: () async {
+              //       await launch(url);
+              //     },
+              //     child: Text(num),
+              //   ),
+              // ),
+              child: FutureBuilder<List<Doctor>>(
+                  future: cubit.getDoctor(),
+                  builder: (context, snapshot) {
+                    //print(snapshot.data!.id);
+                    var list = snapshot.requireData;
+
+                    if (!snapshot.hasData) {
+                      return Container(
+                          width: 800,
+                          height: 200,
+                          color: Colors.yellow,
+                          child: Center(
+                            child: Text("${list[0].firstName}"),
+                          )
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return Container(
+                          width: 800,
+                          height: 200,
+                          color: Colors.red,
+                          child: const Center(
+                            child: Text('Error'),
+                          )
+                      );
+                    }
+
+                    return Container(
+                        width: 800,
+                        height: 200,
+                        color: Colors.red,
+                        child:  Center(
+                        child: Text('${list[1].firstName}'),
+                    ));
+                  }),
+            ));
+      });
   }
 }

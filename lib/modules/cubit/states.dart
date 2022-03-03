@@ -12,7 +12,10 @@ class LoginLoadingState extends States {}
 
 class LoginSuccessState extends States {}
 
-class LoginErrorState extends States {}
+class LoginErrorState extends States {
+  final String error;
+  LoginErrorState({required this.error});
+}
 
 class CreateUserSuccessState extends States {}
 

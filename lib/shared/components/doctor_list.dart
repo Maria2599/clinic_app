@@ -1,67 +1,68 @@
-import 'package:flutter/cupertino.dart';
+import 'package:clinic_app/models/doctorModel.dart';
+import 'package:clinic_app/modules/cubit/appCubit.dart';
+import 'package:clinic_app/modules/cubit/states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-Widget buildSpecialistList() => Container(
-      height: 100.0,
-      width: 150.0,
-      decoration: BoxDecoration(
-          color: Colors.teal, borderRadius: BorderRadius.circular(20.0)),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(children: [
-          Expanded(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Special ",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                  ),
-                  Spacer(),
-                  Text(
-                    "\n  Click here",
-                    textAlign: TextAlign.center,
-                  ),
-                ]),
-          ),
-        ]),
-      ),
+import 'components.dart';
+
+class DoctorList extends StatelessWidget {
+  const DoctorList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return  BlocConsumer<AppCubit, States>(
+    listener: (BuildContext context, state) {},
+    builder: (BuildContext context, Object? state) {
+
+    var cubit = AppCubit.get(context);
+    return Scaffold(
+    appBar: AppBar(
+    title: Center(child: Text("Doctors")),
+    ),
+    backgroundColor: Colors.white,
+    body:  FutureBuilder<List<Doctor>>(
+        future: cubit.getDoctor(),
+        builder: (context, snapshot) {
+          //print(snapshot.data!.id);
+          var list = cubit.spec;
+
+          if (!snapshot.hasData) {
+            return Container(
+                width: double.infinity,
+                color: Colors.yellow,
+                child: Center(
+                  child: Text("loading"),
+                )
+            );
+          }
+          if (snapshot.hasError) {
+            return Container(
+                width: double.infinity,
+                color: Colors.red,
+                child: const Center(
+                  child: Text('Error'),
+                )
+            );
+          }
+
+          return Container(
+              width: double.infinity,
+              child:  Center(
+                child: ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) => buildDoctorList(list[index]),
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: 20.0,
+                    ),
+                    itemCount: list.length),
+              ));
+        }),
     );
+    });
 
-Widget buildDoctorList() => Container(
-      height: 200.0,
-      decoration: BoxDecoration(
-          color: Colors.teal, borderRadius: BorderRadius.circular(30.0)),
-      child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Dr: ",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                Text(
-                  "Name ",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-                SizedBox(
-                  height: 50.0,
-                ),
+  }
+}
 
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 150.0,),
-                  child: Text(
-                    "\n  Click here",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ]),
-      ),
-    );
